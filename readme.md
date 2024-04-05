@@ -67,6 +67,16 @@ Ensure you configure these variables in your integration setup to connect to you
   - Default: 15 minutes. The interval cannot be more frequent than 15 minutes.
   - This option can be updated from the front-end integration "configure" interface at any time.
 
+## Options
+
+Find configuration options under **Settings ➤ Devices & Services ➤ Integrations ➤ Audi Connect ➤ Configure**:
+
+- **Cloud Update at Startup (`bool`)**: Toggle cloud updates at integration startup. Ideal for development or frequent HA restarts.
+- **Active Polling at Scan Interval (`bool`)**: Enable or disable active polling.
+- **Scan Interval (`int`)**: Defines polling frequency in minutes (minimum 15). Effective only if "Active Polling at Scan Interval" is enabled.
+
+_Note: A Home Assistant restart is required for changes to take effect._
+
 ## Services
 
 ### Audi Connect: Refresh Vehicle Data
@@ -87,8 +97,7 @@ _This_ service triggers an update request from the cloud.
 
 - Functionality: Updates data for all vehicles from the online source, mirroring the action performed at integration startup or during scheduled refresh intervals.
 - Behavior: Does not force a vehicle-side data refresh. Consequently, if vehicles haven't recently pushed updates, retrieved data might be outdated.
-- Recommended Usage: Ideal for post-command updates (e.g., after initiating climate control). To ensure data accuracy, a delay of approximately 30 seconds is recommended between command issuance and this service call.
-- Note: This service essentially replicates the function of restarting the integration, offering a more granular control over data refresh moments.
+- Note: This service replicates the function of active polling without scheduling, offering a more granular control over data refresh moments.
 
 #### Service Parameters
 
@@ -130,7 +139,7 @@ data:
 #### Notes
 
 - Certain action require the S-PIN to be set in the configuration.
-- When an action is successfully performed, an update request is automatically triggered.
+- When the action is successfully performed, an update request is automatically triggered.
 
 ### Audi Connect: Start Climate Control
 
@@ -168,7 +177,7 @@ data:
 - The `temp_f` and `temp_c` parameters are mutually exclusive. If both are provided, `temp_f` takes precedence.
 - If neither `temp_f` nor `temp_c` is provided, the system defaults to 70°F or 21°C.
 - Certain action require the S-PIN to be set in the configuration.
-- When an action is successfully performed, an update request is automatically triggered.
+- When the action is successfully performed, an update request is automatically triggered.
 
 ## Example Dashboard Card
 
